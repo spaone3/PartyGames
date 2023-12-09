@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Real-time Web App</title>
+  <link rel="stylesheet" href="styles/default.css">
+</head>
+<body>
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="input" type="text" autocomplete="off" pattern="\d*" maxlength="4" placeholder="Enter 4-digit code" required />
+    <button id="join-button" disabled>Join Lobby</button>
+  </form>
+
+  <button id="lobby-button">Create Lobby</button>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(function () {
+      const socket = io();
+
+      $('#input').on('input', function() {
+        const isValid = this.checkValidity();
+        $('#join-button').prop('disabled', !isValid);
+      });
+
+
+      $('#form').submit(function(){
+        const lobbyCode = $('#input').val() || 1; // Get the lobby code from the input field
+        socket.emit('join lobby', { lobbyCode });
+        return false;
+      });
+    
+      socket.on('redirect to lobby', (lobbyCode) => {
+        window.location.href = `/lobby/${lobbyCode}`;
+      });
+
+
+
+
+      $('#lobby-button').click(function(){
+        window.location.href = '/lobby/create';
+      })
+      
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Real-time Web App</title>
+</head>
+<body>
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="input" autocomplete="off" /><button>Send</button>
+  </form>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script>
+    $(function () {
+      const socket = io();
+      $('form').submit(function(){
+        socket.emit('chat message', $('#input').val());
+        $('#input').val('');
+        return false;
+      });
+      socket.on('chat message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+    });
+  </script>
+</body>
+</html>
+
+<!--Simple live update form that works well
+
+
+
+
+io.on('connection', (socket) => {
+    console.log('A user connected');
+  
+    socket.on('disconnect', () => {
+      console.log('User disconnected');
+    });
+  
+    // Handle custom events for real-time communication
+    socket.on('chat message', (msg) => {
+      console.log(msg);
+      io.emit('chat message', msg); // Broadcast the message to all connected clients
+    });
+  });
+  
+
+
+
+
+-->
