@@ -31,20 +31,23 @@
       $('#form').submit(function(){
         const lobbyCode = $('#input').val() || 1; // Get the lobby code from the input field
         socket.emit('join lobby', { lobbyCode });
-        return false;
       });
     
-      socket.on('redirect to lobby', (lobbyCode) => {
-        window.location.href = `/lobby/${lobbyCode}`;
-      });
-
-
-
 
       $('#lobby-button').click(function(){
-        window.location.href = '/lobby/create';
+        socket.emit('create lobby');
       })
+
+      socket.on('redirect to lobby', (data) => {
+        console.log(data);
+        console.log("AAAAAAAAAAAAAAAA");
+        window.location.href = `/lobby/${data.lobbyCode}?socketId=${data.socketId}`;
+      });
       
+
+
+
+
     });
   </script>
 </body>
